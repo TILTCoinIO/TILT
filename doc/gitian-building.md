@@ -310,7 +310,7 @@ Clone the git repositories for tilt and Gitian.
 ```bash
 git clone https://github.com/devrandom/gitian-builder.git
 git clone https://github.com/tilt-project/tilt
-git clone https://github.com/tilt-project/gitian.sigs.tilt.git
+git clone https://github.com/tilt-project/gitian.sigs.tlt.git
 ```
 
 Setting up the Gitian image
@@ -475,5 +475,5 @@ Uploading signatures
 ---------------------
 
 After building and signing you can push your signatures (both the `.assert` and `.assert.sig` files) to the
-[tilt-project/gitian.sigs.tilt](https://github.com/tilt-project/gitian.sigs.tilt/) repository, or if that's not possible create a pull
+[tilt-project/gitian.sigs.tlt](https://github.com/tilt-project/gitian.sigs.tlt/) repository, or if that's not possible create a pull
 request. You can also mail the files to thrasher (thrasher@addictionsofware.com) and he will commit them.

@@ -12,7 +12,7 @@ BITCOINQT=${BITCOINQT:-$SRCDIR/qt/tilt-qt}
 [ ! -x $BITCOIND ] && echo "$TILTD not found or not executable." && exit 1
 
 # The autodetected version git tag can screw up manpage output a little bit
-BTCVER=($($TITILTLI --version | head -n1 | awk -F'[ -]' '{ print $6, $7 }'))
+BTCVER=($($TILTCLI --version | head -n1 | awk -F'[ -]' '{ print $6, $7 }'))
 
 # Create a footer file with copyright content.
 # This gets autodetected fine for bitcoind if --version-string is not set,

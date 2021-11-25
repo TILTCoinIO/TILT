@@ -31,7 +31,7 @@ If you're using the automated script (found in [contrib/gitian-build.sh](/contri
 Check out the source code in the following directory hierarchy.
 
     cd /path/to/your/toplevel/build
-    git clone https://github.com/tilt-project/gitian.sigs.tilt.git
+    git clone https://github.com/tilt-project/gitian.sigs.tlt.git
     git clone https://github.com/tilt-project/tilt-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
     git clone https://github.com/tilt-project/tilt.git
@@ -82,9 +82,9 @@ Setup Gitian descriptors:
     git checkout v${VERSION}
     popd
 
-Ensure your gitian.sigs.tilt are up-to-date if you wish to gverify your builds against other Gitian signatures.
+Ensure your gitian.sigs.tlt are up-to-date if you wish to gverify your builds against other Gitian signatures.
 
-    pushd ./gitian.sigs.tilt
+    pushd ./gitian.sigs.tlt
     git pull
     popd
 
@@ -126,16 +126,16 @@ The gbuild invocations below <b>DO NOT DO THIS</b> by default.
 
     pushd ./gitian-builder
     ./bin/gbuild --memory 3000 --commit tilt=v${VERSION} ../tilt/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs.tilt/ ../tilt/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs.tlt/ ../tilt/contrib/gitian-descriptors/gitian-linux.yml
     mv build/out/tilt-*.tar.gz build/out/src/tilt-*.tar.gz ../
 
     ./bin/gbuild --memory 3000 --commit tilt=v${VERSION} ../tilt/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs.tilt/ ../tilt/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs.tlt/ ../tilt/contrib/gitian-descriptors/gitian-win.yml
     mv build/out/tilt-*-win-unsigned.tar.gz inputs/tilt-win-unsigned.tar.gz
     mv build/out/tilt-*.zip build/out/tilt-*.exe ../
 
     ./bin/gbuild --memory 3000 --commit tilt=v${VERSION} ../tilt/contrib/gitian-descriptors/gitian-osx.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs.tilt/ ../tilt/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs.tlt/ ../tilt/contrib/gitian-descriptors/gitian-osx.yml
     mv build/out/tilt-*-osx-unsigned.tar.gz inputs/tilt-osx-unsigned.tar.gz
     mv build/out/tilt-*.tar.gz build/out/tilt-*.dmg ../
     popd
@@ -146,7 +146,7 @@ Build output expected:
   2. linux 32-bit and 64-bit dist tarballs (`tilt-${VERSION}-linux[32|64].tar.gz`)
   3. windows 32-bit and 64-bit unsigned installers and dist zips (`tilt-${VERSION}-win[32|64]-setup-unsigned.exe`, `tilt-${VERSION}-win[32|64].zip`)
   4. OS X unsigned installer and dist tarball (`tilt-${VERSION}-osx-unsigned.dmg`, `tilt-${VERSION}-osx64.tar.gz`)
-  5. Gitian signatures (in `gitian.sigs.tilt/${VERSION}-<linux|{win,osx}-unsigned>/(your Gitian key)/`)
+  5. Gitian signatures (in `gitian.sigs.tlt/${VERSION}-<linux|{win,osx}-unsigned>/(your Gitian key)/`)
 
 ### Verify other gitian builders signatures to your own. (Optional)
 
@@ -158,21 +158,21 @@ Add other gitian builders keys to your gpg keyring, and/or refresh keys.
 Verify the signatures
 
     pushd ./gitian-builder
-    ./bin/gverify -v -d ../gitian.sigs.tilt/ -r ${VERSION}-linux ../tilt/contrib/gitian-descriptors/gitian-linux.yml
-    ./bin/gverify -v -d ../gitian.sigs.tilt/ -r ${VERSION}-win-unsigned ../tilt/contrib/gitian-descriptors/gitian-win.yml
-    ./bin/gverify -v -d ../gitian.sigs.tilt/ -r ${VERSION}-osx-unsigned ../tilt/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gverify -v -d ../gitian.sigs.tlt/ -r ${VERSION}-linux ../tilt/contrib/gitian-descriptors/gitian-linux.yml
+    ./bin/gverify -v -d ../gitian.sigs.tlt/ -r ${VERSION}-win-unsigned ../tilt/contrib/gitian-descriptors/gitian-win.yml
+    ./bin/gverify -v -d ../gitian.sigs.tlt/ -r ${VERSION}-osx-unsigned ../tilt/contrib/gitian-descriptors/gitian-osx.yml
     popd
 
 ### Next steps:
 
-Commit your signature to gitian.sigs.tilt:
+Commit your signature to gitian.sigs.tlt:
 
-    pushd gitian.sigs.tilt
+    pushd gitian.sigs.tlt
     git add ${VERSION}-linux/${SIGNER}
     git add ${VERSION}-win-unsigned/${SIGNER}
     git add ${VERSION}-osx-unsigned/${SIGNER}
     git commit -a
-    git push  # Assuming you can push to the gitian.sigs.tilt tree
+    git push  # Assuming you can push to the gitian.sigs.tlt tree
     popd
 
 Wait for Windows/OS X detached signatures:
@@ -184,8 +184,8 @@ Create (and optionally verify) the signed OS X binary:
 
     pushd ./gitian-builder
     ./bin/gbuild -i --commit signature=v${VERSION} ../tilt/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs.tilt/ ../tilt/contrib/gitian-descriptors/gitian-osx-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs.tilt/ -r ${VERSION}-osx-signed ../tilt/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs.tlt/ ../tilt/contrib/gitian-descriptors/gitian-osx-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs.tlt/ -r ${VERSION}-osx-signed ../tilt/contrib/gitian-descriptors/gitian-osx-signer.yml
     mv build/out/tilt-osx-signed.dmg ../tilt-${VERSION}-osx.dmg
     popd
 
@@ -193,19 +193,19 @@ Create (and optionally verify) the signed Windows binaries:
 
     pushd ./gitian-builder
     ./bin/gbuild -i --commit signature=v${VERSION} ../tilt/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs.tilt/ ../tilt/contrib/gitian-descriptors/gitian-win-signer.yml
-    ./bin/gverify -v -d ../gitian.sigs.tilt/ -r ${VERSION}-win-signed ../tilt/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs.tlt/ ../tilt/contrib/gitian-descriptors/gitian-win-signer.yml
+    ./bin/gverify -v -d ../gitian.sigs.tlt/ -r ${VERSION}-win-signed ../tilt/contrib/gitian-descriptors/gitian-win-signer.yml
     mv build/out/tilt-*win64-setup.exe ../tilt-${VERSION}-win64-setup.exe
     mv build/out/tilt-*win32-setup.exe ../tilt-${VERSION}-win32-setup.exe
     popd
 
 Commit your signature for the signed OS X/Windows binaries:
 
-    pushd gitian.sigs.tilt
+    pushd gitian.sigs.tlt
     git add ${VERSION}-osx-signed/${SIGNER}
     git add ${VERSION}-win-signed/${SIGNER}
     git commit -a
-    git push  # Assuming you can push to the gitian.sigs.tilt tree
+    git push  # Assuming you can push to the gitian.sigs.tlt tree
     popd
 
 ### After 3 or more people have gitian-built and their results match:
