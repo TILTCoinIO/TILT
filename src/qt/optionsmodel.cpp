@@ -69,6 +69,8 @@ void OptionsModel::Init(bool resetSettings)
     fMinimizeOnClose = settings.value("fMinimizeOnClose").toBool();
 
     // Display
+    if (!settings.contains("digits"))
+        settings.setValue("digits", "0");
     if (!settings.contains("nDisplayUnit"))
         settings.setValue("nDisplayUnit", BitcoinUnits::BTC);
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
@@ -237,6 +239,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return nDisplayUnit;
         case ThirdPartyTxUrls:
             return strThirdPartyTxUrls;
+        case Digits:
+            return settings.value("digits");
         case Language:
             return settings.value("language");
         case CoinControlFeatures:
@@ -288,7 +292,7 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case ProxyUse:
             if (settings.value("fUseProxy") != value) {
                 settings.setValue("fUseProxy", value.toBool());
-                setRestartRequired(true);
+                setRestartRequired(false);
             }
             break;
         case ProxyIP: {
@@ -366,6 +370,12 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
                 setRestartRequired(true);
             }
             break;
+        case Digits:
+            if (settings.value("digits") != value) {
+                settings.setValue("digits", value);
+                setRestartRequired(false);
+            }
+            break;   
         case Language:
             if (settings.value("language") != value) {
                 settings.setValue("language", value);
