@@ -28,11 +28,13 @@ NetworkStyle::NetworkStyle(const QString &_appName, const int iconColorHueShift,
 {
     // load pixmap
     QPixmap pixmap(":/icons/bitcoin");
+    QPixmap splashImagePixmap(":/icons/splashscreen");
 
     if(iconColorHueShift != 0 && iconColorSaturationReduction != 0)
     {
         // generate QImage from QPixmap
         QImage img = pixmap.toImage();
+        QImage splashImageImg = splashImagePixmap.toImage();
 
         int h,s,l,a;
 
@@ -52,7 +54,7 @@ NetworkStyle::NetworkStyle(const QString &_appName, const int iconColorHueShift,
                 col.getHsl(&h,&s,&l);
 
                 // rotate color on RGB color circle
-                // 70Â° should end up with the typical "testnet" green
+                // 70° should end up with the typical "testnet" green
                 h+=iconColorHueShift;
 
                 // change saturation value
@@ -70,13 +72,16 @@ NetworkStyle::NetworkStyle(const QString &_appName, const int iconColorHueShift,
         //convert back to QPixmap
 #if QT_VERSION >= 0x040700
         pixmap.convertFromImage(img);
+        splashImagePixmap.convertFromImage(splashImageImg);
 #else
         pixmap = QPixmap::fromImage(img);
+        splashImagePixmap = QPixmap::fromImage(splashImageImg);
 #endif
     }
 
     appIcon             = QIcon(pixmap);
     trayAndWindowIcon   = QIcon(pixmap.scaled(QSize(256,256)));
+    splashImage         = splashImagePixmap;
 }
 
 const NetworkStyle *NetworkStyle::instantiate(const QString &networkId)
