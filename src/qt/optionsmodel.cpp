@@ -70,7 +70,7 @@ void OptionsModel::Init(bool resetSettings)
 
     // Display
     if (!settings.contains("digits"))
-        settings.setValue("digits", "0");
+        settings.setValue("digits", "2");
     if (!settings.contains("nDisplayUnit"))
         settings.setValue("nDisplayUnit", BitcoinUnits::BTC);
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
