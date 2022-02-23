@@ -557,11 +557,47 @@ boost::filesystem::path GetConfigFile(const std::string& confPath)
     return pathConfigFile;
 }
 
+
 void ReadConfigFile(const std::string& confPath)
 {
+//    boost::filesystem::ifstream streamConfig(GetConfigFile(confPath));
+//    if (!streamConfig.good())
+//        return; // No bitcoin.conf file is OK
+
     boost::filesystem::ifstream streamConfig(GetConfigFile(confPath));
-    if (!streamConfig.good())
-        return; // No bitcoin.conf file is OK
+    if (!streamConfig.good()){
+        // Create empty minerium.conf if it does not excist
+        FILE* configFile = fopen(GetConfigFile(confPath).string().c_str(), "a");
+//        if (configFile != NULL)
+//            fclose(configFile);
+
+        if (configFile != NULL) {
+            std::string strHeader = "# Tilt coin config file\n"
+                          "rpcuser=username\n"
+                          "rpcpassword=password\n"
+                          "server=1\n"
+                          "listen=1\n"
+                          "#txindex=1\n"
+                          "daemon=1\n"
+                          "port=44684\n"
+                          "rpcport=44687\n"
+                          "onlynet=ipv4\n"
+                          "rpcbind=127.0.0.1\n"
+                          "maxconnections=40\n"
+                          "fallbackfee=0.0001\n"
+                          "rpcallowip=127.0.0.1\n"
+                          "deprecatedrpc=accounts\n"
+                          "\n"
+                          "# ADDNODES:\n"
+                          "addnode=208.109.34.100:44684\n"
+                          "addnode=45.77.150.151:44684\n"
+                          "addnode=103.249.70.56:44684\n"
+                          "addnode=103.249.70.56:44884\n";
+            fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
+            fclose(configFile);
+        }
+        return; // Nothing to read, so just return
+    }
 
     {
         LOCK(cs_args);
@@ -851,7 +887,7 @@ std::string CopyrightHolders(const std::string& strPrefix)
     // Check for untranslated substitution to make sure Bitcoin Core copyright is not removed by accident
     if (strprintf(COPYRIGHT_HOLDERS, COPYRIGHT_HOLDERS_SUBSTITUTION).find("Bitcoin Core") == std::string::npos) {
         std::string strYear = strPrefix;
-        strYear.replace(strYear.find("2011"), sizeof("2011")-1, "2009");
+        strYear.replace(strYear.find("2021"), sizeof("2021")-1, "2009");
         strCopyrightHolders += "\n" + strYear + "The Bitcoin Core developers";
     }
     return strCopyrightHolders;
